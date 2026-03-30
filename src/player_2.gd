@@ -1,4 +1,4 @@
-extends Node
+extends Area2D
 
 const SPAWN_INTERVAL = 3.0
 
