@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 		spawn_timer = 0.0
 
 func _spawn_obstacle() -> void:
-	var screen: Vector2 = get_viewport_rect().size
+	var screen: Vector2 = get_viewport().get_visible_rect().size
 	var obstacle = obstacle_scene.instantiate()
 	obstacle.position.x = randf_range(50.0, screen.x - 50.0)
 	obstacle.position.y = -50.0
