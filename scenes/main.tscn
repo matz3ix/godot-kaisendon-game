@@ -4,22 +4,72 @@
 [ext_resource type="Script" uid="uid://dp3a711ok4qh1" path="res://src/player_1.gd" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://bshxqusqa6m85" path="res://src/player_2.gd" id="3_tbgi4"]
 
-[node name="Node2D" type="Node2D" unique_id=471755109]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p1"]
+size = Vector2(100, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p2"]
+size = Vector2(100, 30)
+
+[node name="Main" type="Node2D"]
 script = ExtResource("1_sugp2")
 
-[node name="Player1" type="Area2D" parent="." unique_id=301671523]
+[node name="Player1" type="Area2D" parent="."]
 script = ExtResource("2_jyhfs")
 
-[node name="Player2" type="Area2D" parent="." unique_id=204232605]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player1"]
+shape = SubResource("RectangleShape2D_p1")
+
+[node name="ColorRect" type="ColorRect" parent="Player1"]
+offset_left = -50.0
+offset_top = -15.0
+offset_right = 50.0
+offset_bottom = 15.0
+color = Color(0.2, 0.6, 1, 1)
+
+[node name="Player2" type="Area2D" parent="."]
 script = ExtResource("3_tbgi4")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=857091224]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player2"]
+shape = SubResource("RectangleShape2D_p2")
 
-[node name="ScoreLabel" type="Label" parent="CanvasLayer" unique_id=1180408771]
-offset_right = 40.0
-offset_bottom = 23.0
+[node name="ColorRect" type="ColorRect" parent="Player2"]
+offset_left = -50.0
+offset_top = -15.0
+offset_right = 50.0
+offset_bottom = 15.0
+color = Color(1, 0.6, 0.2, 1)
 
-[node name="GameOverLabel" type="Label" parent="CanvasLayer" unique_id=387036941]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer"]
+offset_right = 220.0
+offset_bottom = 30.0
+text = "スコア: 0"
+
+[node name="TimerLabel" type="Label" parent="CanvasLayer"]
+offset_left = 380.0
+offset_top = 0.0
+offset_right = 700.0
+offset_bottom = 30.0
+horizontal_alignment = 1
+text = "残り: 180秒"
+
+[node name="SetLabel" type="Label" parent="CanvasLayer"]
+offset_left = 820.0
+offset_top = 0.0
+offset_right = 1024.0
+offset_bottom = 30.0
+horizontal_alignment = 2
+text = "セット 1 / 2"
+
+[node name="GameOverLabel" type="Label" parent="CanvasLayer"]
 visible = false
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 200.0
+offset_top = 180.0
+offset_right = 824.0
+offset_bottom = 450.0
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+text = "ゲーム終了"
+

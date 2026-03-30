@@ -1,12 +1,16 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene format=3 uid="uid://bobs00000001"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 25.0
 
 [node name="Obstacle" type="Area2D"]
 
-  [node name="CollisionShape2D" type="CollisionShape2D"]
-  shape = SubResource( 1 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
 
-  [node name="ColorRect" type="ColorRect"]
-  color = Color( 1, 0, 0, 1 )
-
-[sub_resource type="CircleShape2D" id=1]
-  radius = 32.0
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+color = Color(1, 0.3, 0.1, 1)
