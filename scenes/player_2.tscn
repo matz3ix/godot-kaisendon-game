@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[node]
+type="Node"
+
+[node script="res://player_2.gd"]
