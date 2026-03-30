@@ -3,9 +3,9 @@ extends Area2D
 const FALL_SPEED = 200.0
 
 const SIZE_DATA = [
-	{"score": 10, "size": Vector2(30, 30), "color": Color(1.0, 0.95, 0.6)},   # 小盛り
-	{"score": 15, "size": Vector2(50, 50), "color": Color(1.0, 0.75, 0.3)},   # 普通盛り
-	{"score": 20, "size": Vector2(70, 70), "color": Color(1.0, 0.5, 0.1)},    # 大盛り
+	{"score": 10, "size": Vector2(200, 200), "color": Color(1.0, 0.95, 0.6)},   # 小盛り
+	{"score": 15, "size": Vector2(350, 350), "color": Color(1.0, 0.75, 0.3)},   # 普通盛り
+	{"score": 20, "size": Vector2(450, 450), "color": Color(1.0, 0.5, 0.1)},    # 大盛り
 ]
 
 var score_value: int = 10
