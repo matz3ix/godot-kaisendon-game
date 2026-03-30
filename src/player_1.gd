@@ -1,38 +1,35 @@
 extends Area2D
-var speed = 300
-var screen_size
+
+const SPEED = 400.0
+
+var screen_size: Vector2
 var game_manager
 
-func _ready():
-    screen_size = get_viewport_rect().size
-    connect("area_entered", Callable(self, "_on_area_entered"))
-    print("Player 1 Ready!")
+func _ready() -> void:
+	screen_size = get_viewport_rect().size
+	area_entered.connect(_on_area_entered)
 
-func _process(delta):
-    if not game_manager or not game_manager.game_over:
-        var velocity = Vector2.ZERO
-        if Input.is_action_pressed("ui_right"):
-            velocity.x += 1
-        if Input.is_action_pressed("ui_left"):
-            velocity.x -= 1
-        if Input.is_action_pressed("ui_down"):
-            velocity.y += 1
-        if Input.is_action_pressed("ui_up"):
-            velocity.y -= 1
+func _process(delta: float) -> void:
+	if not game_manager or not game_manager.game_active:
+		return
 
-        if velocity.length() > 0:
-            velocity = velocity.normalized() * speed
-            position += velocity * delta
-            position.x = clamp(position.x, 0, screen_size.x)
-            position.y = clamp(position.y, 0, screen_size.y)
+	var vel_x: float = 0.0
+	if Input.is_action_pressed("ui_right"):
+		vel_x += 1.0
+	if Input.is_action_pressed("ui_left"):
+		vel_x -= 1.0
 
-func _on_area_entered(area):
-    if area.is_in_group("obstacle"):
-        print("Hit by obstacle! Game Over!")
-        if game_manager:
-            game_manager.game_end()
-    elif area.is_in_group("rice_bowl"):
-        print("Caught rice bowl!")
-        if game_manager:
-            game_manager.add_score(10)
-        area.queue_free()
+	position.x += vel_x * SPEED * delta
+	position.x = clamp(position.x, 0.0, screen_size.x)
+
+func _on_area_entered(area: Area2D) -> void:
+	if area.is_in_group("obstacle"):
+		var penalty: int = randi_range(10, 35)
+		if game_manager:
+			game_manager.deduct_score(penalty)
+		area.queue_free()
+	elif area.is_in_group("rice_bowl"):
+		var points: int = area.get_score()
+		if game_manager:
+			game_manager.add_score(points)
+		area.queue_free()
