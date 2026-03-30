@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" path="res://src/rice_bowl.gd" id="1_rb"]
 
-[sub_resource type="RectangleShape2D" id="1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rb1"]
 size = Vector2(50, 50)
 
 [node name="RiceBowl" type="Area2D"]
 script = ExtResource("1_rb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("1")
+shape = SubResource("RectangleShape2D_rb1")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 position = Vector2(-25, -25)
