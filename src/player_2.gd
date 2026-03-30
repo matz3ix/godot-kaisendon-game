@@ -22,6 +22,3 @@ func _spawn_obstacle() -> void:
 	obstacle.position.y = -50.0
 	obstacle.add_to_group("obstacle")
 	get_parent().add_child(obstacle)
-	var tween: Tween = create_tween()
-	tween.tween_property(obstacle, "position:y", screen.y + 50.0, 5.0)
-	tween.tween_callback(obstacle.queue_free)
