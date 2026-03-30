@@ -1,1 +1,0 @@
-<contents of player_2.gd>
