@@ -1,14 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq1obs7tacl3k"]
+[gd_scene load_steps=2 format=3]
 
-[sub_resource type="CircleShape2D" id="1"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_obs"]
 radius = 25.0
 
 [node name="Obstacle" type="Area2D"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("1")
+shape = SubResource("CircleShape2D_obs")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-position = Vector2(-25, -25)
-size = Vector2(50, 50)
-color = Color(1, 0, 0, 1)
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+color = Color(1.0, 0.0, 0.0, 1.0)
