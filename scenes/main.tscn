@@ -1,3 +1,25 @@
 [gd_scene format=3 uid="uid://bx8chdjlg68au"]
 
+[ext_resource type="Script" uid="uid://bmemanhb1mrkx" path="res://src/main.gd" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://dp3a711ok4qh1" path="res://src/player_1.gd" id="2_jyhfs"]
+[ext_resource type="Script" uid="uid://bshxqusqa6m85" path="res://src/player_2.gd" id="3_tbgi4"]
+
 [node name="Node2D" type="Node2D" unique_id=471755109]
+script = ExtResource("1_sugp2")
+
+[node name="Player1" type="Area2D" parent="." unique_id=301671523]
+script = ExtResource("2_jyhfs")
+
+[node name="Player2" type="Area2D" parent="." unique_id=204232605]
+script = ExtResource("3_tbgi4")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=857091224]
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer" unique_id=1180408771]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="GameOverLabel" type="Label" parent="CanvasLayer" unique_id=387036941]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
