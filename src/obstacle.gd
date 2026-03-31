@@ -2,18 +2,16 @@ extends Area2D
 
 const FALL_SPEED = 150.0
 
-const TOPPING_COLORS = [
-	Color(0.98, 0.5, 0.45),   # サーモン
-	Color(0.8, 0.1, 0.1),     # マグロ
-	Color(1.0, 0.85, 0.0),    # 卵
-	Color(0.95, 0.95, 0.95),  # イカ
-	Color(0.9, 0.4, 0.2),     # エビ
+const TOPPING_TEXTURES = [
+	preload("res://asset/samon/samon.png"),    # サーモン
+	preload("res://asset/maguro/maguro.png"),  # マグロ
+	preload("res://asset/tamago/tamago.png"),  # 卵
+	preload("res://asset/ikura/ikura.png"),    # いくら
+	preload("res://asset/ebi/ebi.png"),        # エビ
 ]
 
 func _ready() -> void:
-	var color_rect = $ColorRect
-	if color_rect:
-		color_rect.color = TOPPING_COLORS[randi() % TOPPING_COLORS.size()]
+	$Sprite2D.texture = TOPPING_TEXTURES[randi() % TOPPING_TEXTURES.size()]
 
 func _process(delta: float) -> void:
 	position.y += FALL_SPEED * delta

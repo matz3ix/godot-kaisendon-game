@@ -8,13 +8,7 @@ var game_manager
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	area_entered.connect(_on_area_entered)
-
-func _draw() -> void:
-	# どんぶり（茶色）
-	draw_rect(Rect2(-40, 0, 80, 8), Color(0.65, 0.33, 0.1))   # 縁
-	draw_rect(Rect2(-35, 5, 70, 20), Color(0.55, 0.27, 0.07))  # 本体
-	# ごはん（白）
-	draw_rect(Rect2(-30, -12, 60, 15), Color(1.0, 1.0, 0.95))
+	$Sprite2D.texture = preload("res://asset/donburi/donburi.png")
 
 func _process(delta: float) -> void:
 	if not game_manager or not game_manager.game_active:

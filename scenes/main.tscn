@@ -17,6 +17,8 @@ script = ExtResource("2_p1")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player1"]
 shape = SubResource("shape_p1")
 
+[node name="Sprite2D" type="Sprite2D" parent="Player1"]
+
 [node name="Player2" type="Node2D" parent="."]
 script = ExtResource("3_p2")
 
