@@ -16,10 +16,17 @@ var screen_size: Vector2
 var game_manager
 # 各要素: { "color": Color, "x_offset": float, "size": Vector2 }
 var caught_toppings: Array = []
+# CollisionShape2D の元の高さ（_ready で取得）
+var _base_collision_height: float = 35.0
 
 func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	area_entered.connect(_on_area_entered)
+	# シェイプをインスタンス固有に複製し、元の高さを記録
+	var collision = $CollisionShape2D
+	if collision and collision.shape is RectangleShape2D:
+		collision.shape = collision.shape.duplicate()
+		_base_collision_height = collision.shape.size.y
 
 func _draw() -> void:
 	# どんぶり（茶色）
@@ -72,6 +79,21 @@ func _catch_topping(area: Area2D) -> void:
 	var x_offset = area.global_position.x - global_position.x
 	caught_toppings.append({"color": color, "x_offset": x_offset, "size": topping_size})
 	queue_redraw()
+	# 当たり判定をネタのスタック分だけ上方向に拡大（物理処理外で安全に実行）
+	call_deferred("_update_collision_shape")
+
+func _update_collision_shape() -> void:
+	var collision = $CollisionShape2D
+	if not (collision and collision.shape is RectangleShape2D):
+		return
+	var base_height = _base_collision_height
+	var topping_total_height = 0.0
+	for topping in caught_toppings:
+		var size = topping.get("size", DEFAULT_TOPPING_SIZE)
+		topping_total_height += size.y
+	collision.shape.size.y = base_height + topping_total_height
+	# 下端を固定したまま中心を上にずらす
+	collision.position.y = -(topping_total_height / 2.0)
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("obstacle"):
