@@ -41,22 +41,33 @@ func _on_area_entered(area: Area2D) -> void:
 		if game_manager and points > 0:
 			game_manager.add_score(points)
 
-		# ネタをどんぶりの子ノードにする（reparent）
-		area.reparent(self)
+		# 当たり判定を先に無効化して二重キャッチを防ぐ（set_deferred を使用）
+		area.set_deferred("monitoring", false)
+		area.set_deferred("monitorable", false)
 
-		# ネタの物理処理を止める
-		area.set_process(false)
-		area.set_physics_process(false)
-
-		# ネタをどんぶりの上に積み上げる位置に配置
-		area.position = Vector2(0, -20 - (topping_count * 15))
+		# reparent と位置調整はシグナル処理外で遅延実行
+		var index: int = topping_count
 		topping_count += 1
+		call_deferred("_reparent_topping", area, index)
 
-		# ネタの当たり判定を無効化（二重キャッチ防止）
-		area.monitoring = false
-		area.monitorable = false
+func _reparent_topping(area: Area2D, index: int) -> void:
+	if not is_instance_valid(area):
+		return
 
-		# CollisionShape2D を無効化
-		for child in area.get_children():
-			if child is CollisionShape2D:
-				child.set_deferred("disabled", true)
+	# ネタをどんぶりの子ノードにする
+	var old_parent = area.get_parent()
+	if old_parent:
+		old_parent.remove_child(area)
+	add_child(area)
+
+	# ネタの物理処理を止める
+	area.set_process(false)
+	area.set_physics_process(false)
+
+	# ネタをどんぶりの上に積み上げる位置に配置
+	area.position = Vector2(0, -20 - (index * 15))
+
+	# CollisionShape2D を無効化
+	for child in area.get_children():
+		if child is CollisionShape2D:
+			child.set_deferred("disabled", true)
