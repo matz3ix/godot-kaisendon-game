@@ -11,10 +11,12 @@ const TOPPING_COLORS = [
 ]
 
 const DEFAULT_TOPPING_SIZE = Vector2(50, 50)
+const RICE_SURFACE_Y = -12.0       # ごはんの上面Y座標
+const COLUMN_WIDTH_FACTOR = 0.5    # 同じ列とみなすX幅の比率（ネタ幅の何割以内か）
 
 var screen_size: Vector2
 var game_manager
-# 各要素: { "color": Color, "x_offset": float, "size": Vector2 }
+# 各要素: { "color": Color, "x_offset": float, "y_pos": float, "size": Vector2 }
 var caught_toppings: Array = []
 # CollisionShape2D の元の高さ（_ready で取得）
 var _base_collision_height: float = 35.0
@@ -33,15 +35,12 @@ func _draw() -> void:
 	draw_rect(Rect2(-40, 0, 80, 8), Color(0.65, 0.33, 0.1))   # 縁
 	draw_rect(Rect2(-35, 5, 70, 20), Color(0.55, 0.27, 0.07))  # 本体
 	# ごはん（白）
-	draw_rect(Rect2(-30, -12, 60, 15), Color(1.0, 1.0, 0.95))
-	# 積み上がったネタ — 落下時と同じサイズ・色で描画
-	var y_pos = -12.0  # ごはんの上面
-	for i in caught_toppings.size():
-		var topping = caught_toppings[i]
+	draw_rect(Rect2(-30, RICE_SURFACE_Y, 60, 15), Color(1.0, 1.0, 0.95))
+	# 積み上がったネタ — 各ネタの絶対位置で描画
+	for topping in caught_toppings:
 		var size = topping.get("size", DEFAULT_TOPPING_SIZE)
-		y_pos -= size.y
 		var x_pos = topping["x_offset"] - size.x / 2.0
-		draw_rect(Rect2(x_pos, y_pos, size.x, size.y), topping["color"])
+		draw_rect(Rect2(x_pos, topping["y_pos"], size.x, size.y), topping["color"])
 
 func _process(delta: float) -> void:
 	if not game_manager or not game_manager.game_active:
@@ -55,6 +54,16 @@ func _process(delta: float) -> void:
 
 	position.x += vel_x * SPEED * delta
 	position.x = clamp(position.x, 0.0, screen_size.x)
+
+func _get_column_top_y(x_offset: float, topping_width: float) -> float:
+	# このX列（x_offsetからtopping_width * COLUMN_WIDTH_FACTOR以内）で最も高い（Yが最小の）位置を返す
+	var top_y = RICE_SURFACE_Y  # ごはんの上面（ネタがない場合のデフォルト）
+	var threshold = topping_width * COLUMN_WIDTH_FACTOR
+	for topping in caught_toppings:
+		if abs(topping["x_offset"] - x_offset) < threshold:
+			if topping["y_pos"] < top_y:
+				top_y = topping["y_pos"]
+	return top_y
 
 func _catch_topping(area: Area2D) -> void:
 	# 落下中のネタから実際の色を取得
@@ -77,7 +86,10 @@ func _catch_topping(area: Area2D) -> void:
 			break
 
 	var x_offset = area.global_position.x - global_position.x
-	caught_toppings.append({"color": color, "x_offset": x_offset, "size": topping_size})
+	# このX列の現在の最上段を求め、その上に配置
+	var col_top_y = _get_column_top_y(x_offset, topping_size.x)
+	var y_pos = col_top_y - topping_size.y
+	caught_toppings.append({"color": color, "x_offset": x_offset, "y_pos": y_pos, "size": topping_size})
 	queue_redraw()
 	# 当たり判定をネタのスタック分だけ上方向に拡大（物理処理外で安全に実行）
 	call_deferred("_update_collision_shape")
@@ -86,12 +98,13 @@ func _update_collision_shape() -> void:
 	var collision = $CollisionShape2D
 	if not (collision and collision.shape is RectangleShape2D):
 		return
-	var base_height = _base_collision_height
-	var topping_total_height = 0.0
+	# 全ネタの中で最も高い（Yが最小の）位置を求める
+	var min_y = RICE_SURFACE_Y
 	for topping in caught_toppings:
-		var size = topping.get("size", DEFAULT_TOPPING_SIZE)
-		topping_total_height += size.y
-	collision.shape.size.y = base_height + topping_total_height
+		if topping["y_pos"] < min_y:
+			min_y = topping["y_pos"]
+	var topping_total_height = RICE_SURFACE_Y - min_y
+	collision.shape.size.y = _base_collision_height + topping_total_height
 	# 下端を固定したまま中心を上にずらす
 	collision.position.y = -(topping_total_height / 2.0)
 
