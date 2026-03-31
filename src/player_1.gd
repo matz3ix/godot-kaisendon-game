@@ -74,10 +74,17 @@ func _catch_and_score(area) -> void:
 		if game_manager and points > 0:
 			game_manager.add_score(points)
 
-func _on_stacked_topping_hit(hitting_area, _stacked_area) -> void:
+func _is_hitting_from_above(hitting_area, target_area) -> bool:
+	return hitting_area.global_position.y < target_area.global_position.y
+
+func _on_stacked_topping_hit(hitting_area, stacked_area) -> void:
+	if not _is_hitting_from_above(hitting_area, stacked_area):
+		return
 	if hitting_area.is_in_group("obstacle") or hitting_area.is_in_group("rice_bowl"):
 		_catch_and_score(hitting_area)
 
 func _on_area_entered(area: Area2D) -> void:
+	if not _is_hitting_from_above(area, self):
+		return
 	if area.is_in_group("obstacle") or area.is_in_group("rice_bowl"):
 		_catch_and_score(area)
