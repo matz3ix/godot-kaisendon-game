@@ -2,13 +2,13 @@ extends Area2D
 
 const SPEED = 400.0
 
-const TOPPING_COLORS = [
-	Color(0.98, 0.5, 0.45),   # サーモン
-	Color(0.8, 0.1, 0.1),     # マグロ
-	Color(1.0, 0.85, 0.0),    # 卵
-	Color(0.95, 0.95, 0.95),  # イカ
-	Color(0.9, 0.4, 0.2),     # エビ
-]
+# どんぶり描画の定数
+const TOPPING_WIDTH = 50       # ネタの幅（obstacle の ColorRect サイズと同じ）
+const TOPPING_HEIGHT = 8       # ネタの高さ
+const TOPPING_BASE_Y = -25     # 1個目のネタのY位置（ごはんの上）
+const TOPPING_STACK_HEIGHT = 10  # ネタを積み上げるごとのY方向オフセット
+const BOWL_LEFT_EDGE = -30     # ごはんの左端
+const BOWL_RIGHT_EDGE = -20    # ネタ描画可能な右端（= ごはん右端30 - TOPPING_WIDTH50 = -20）
 
 var screen_size: Vector2
 var game_manager
@@ -28,9 +28,9 @@ func _draw() -> void:
 	# 積み上がったネタ — 接触時のX位置を保持して描画
 	for i in caught_toppings.size():
 		var topping = caught_toppings[i]
-		var y_offset = -25 - (i * 10)
-		var x_pos = clamp(topping["x_offset"] - 25, -30, 20)
-		draw_rect(Rect2(x_pos, y_offset, 50, 8), topping["color"])
+		var y_offset = TOPPING_BASE_Y - (i * TOPPING_STACK_HEIGHT)
+		var x_pos = clamp(topping["x_offset"] - TOPPING_WIDTH / 2, BOWL_LEFT_EDGE, BOWL_RIGHT_EDGE)
+		draw_rect(Rect2(x_pos, y_offset, TOPPING_WIDTH, TOPPING_HEIGHT), topping["color"])
 
 func _process(delta: float) -> void:
 	if not game_manager or not game_manager.game_active:
@@ -55,7 +55,11 @@ func _on_area_entered(area: Area2D) -> void:
 
 		# ネタのX座標とどんぶりのX座標の差分を保存
 		var x_offset = area.global_position.x - global_position.x
-		var color = TOPPING_COLORS[randi() % TOPPING_COLORS.size()]
+		# obstacle の ColorRect から実際の色を取得
+		var color = Color.RED
+		var color_rect = area.get_node_or_null("ColorRect")
+		if color_rect:
+			color = color_rect.color
 		caught_toppings.append({"color": color, "x_offset": x_offset})
 		queue_redraw()
 
