@@ -31,5 +31,5 @@ func get_score() -> int:
 
 func _process(delta: float) -> void:
 	position.y += FALL_SPEED * delta
-	if position.y > get_viewport_rect().size.y + 100.0:
+	if position.y > get_viewport().get_visible_rect().size.y + 100.0:
 		queue_free()

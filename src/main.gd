@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 		_end_set()
 
 func _spawn_rice_bowl() -> void:
-	var screen_x: float = get_viewport_rect().size.x
+	var screen_x: float = get_viewport().get_visible_rect().size.x
 	var bowl = rice_bowl_scene.instantiate()
 	bowl.set_size_type(randi() % 3)
 	bowl.position.x = randf_range(50.0, screen_x - 50.0)
