@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://src/player_1.gd" id="1_p1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p1"]
-size = Vector2(80, 35)
+size = Vector2(80, 55)
 
 [node name="Player1" type="Area2D"]
 script = ExtResource("1_p1")
@@ -12,17 +12,17 @@ script = ExtResource("1_p1")
 shape = SubResource("RectangleShape2D_p1")
 
 [node name="Bowl" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-40, 0, 40, 0, 30, 30, -30, 30)
 color = Color(0.6, 0.3, 0.1, 1.0)
-polygon = PackedVector2Array(-40, -17, 40, -17, 20, 18, -20, 18)
 
 [node name="Rice" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-35, 0, -15, -20, 0, -25, 15, -20, 35, 0)
 color = Color(1.0, 1.0, 0.95, 1.0)
-polygon = PackedVector2Array(-35, -17, 35, -17, 25, -25, 5, -32, -15, -28)
 
 [node name="Salmon" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-25, -18, -10, -14, -7, -24, -22, -22)
 color = Color(1.0, 0.5, 0.3, 1.0)
-polygon = PackedVector2Array(-15, -20, -3, -27, 5, -23, -7, -16)
 
 [node name="Tuna" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(7, -24, 22, -22, 25, -18, 10, -14)
 color = Color(0.8, 0.1, 0.1, 1.0)
-polygon = PackedVector2Array(5, -23, 17, -30, 21, -25, 9, -18)

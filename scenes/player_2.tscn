@@ -1,28 +1,22 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://src/player_1.gd" id="1_p2"]
+[ext_resource type="Script" path="res://src/player_2.gd" id="1_p2"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_p2"]
-size = Vector2(80, 35)
-
-[node name="Player2" type="Area2D"]
+[node name="Player2" type="Node2D"]
 script = ExtResource("1_p2")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_p2")
-
 [node name="Bowl" type="Polygon2D" parent="."]
-color = Color(0.4, 0.2, 0.05, 1.0)
-polygon = PackedVector2Array(-40, -17, 40, -17, 20, 18, -20, 18)
+polygon = PackedVector2Array(-40, 0, 40, 0, 30, 30, -30, 30)
+color = Color(0.2, 0.2, 0.25, 1.0)
 
 [node name="Rice" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-35, 0, -15, -20, 0, -25, 15, -20, 35, 0)
 color = Color(1.0, 1.0, 0.95, 1.0)
-polygon = PackedVector2Array(-35, -17, 35, -17, 25, -25, 5, -32, -15, -28)
 
 [node name="Salmon" type="Polygon2D" parent="."]
-color = Color(1.0, 0.6, 0.4, 1.0)
-polygon = PackedVector2Array(-15, -20, -3, -27, 5, -23, -7, -16)
+polygon = PackedVector2Array(-25, -18, -10, -14, -7, -24, -22, -22)
+color = Color(1.0, 0.5, 0.3, 1.0)
 
 [node name="Tuna" type="Polygon2D" parent="."]
-color = Color(0.9, 0.2, 0.2, 1.0)
-polygon = PackedVector2Array(5, -23, 17, -30, 21, -25, 9, -18)
+polygon = PackedVector2Array(7, -24, 22, -22, 25, -18, 10, -14)
+color = Color(0.8, 0.1, 0.1, 1.0)
