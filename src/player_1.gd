@@ -20,10 +20,10 @@ func _ready() -> void:
 	area_entered.connect(_on_area_entered)
 
 func _draw() -> void:
-	# どんぶり（茶色の台形風）
-	draw_rect(Rect2(-35, 5, 70, 20), Color(0.55, 0.27, 0.07))  # 暗い茶色
-	draw_rect(Rect2(-40, 0, 80, 8), Color(0.65, 0.33, 0.1))    # 縁
-	# ごはん（白い山盛り）
+	# どんぶり（茶色）
+	draw_rect(Rect2(-40, 0, 80, 8), Color(0.65, 0.33, 0.1))   # 縁
+	draw_rect(Rect2(-35, 5, 70, 20), Color(0.55, 0.27, 0.07))  # 本体
+	# ごはん（白）
 	draw_rect(Rect2(-30, -12, 60, 15), Color(1.0, 1.0, 0.95))
 	# 積み上がったネタ — 接触時のX位置を保持して描画
 	for i in caught_toppings.size():
@@ -45,12 +45,19 @@ func _process(delta: float) -> void:
 	position.x += vel_x * SPEED * delta
 	position.x = clamp(position.x, 0.0, screen_size.x)
 
+func _catch_topping() -> void:
+	caught_toppings.append(TOPPING_COLORS[randi() % TOPPING_COLORS.size()])
+	queue_redraw()
+
 func _on_area_entered(area: Area2D) -> void:
-	if area.is_in_group("obstacle") or area.is_in_group("rice_bowl"):
+	if area.is_in_group("obstacle"):
+		_catch_topping()
+		if game_manager:
+			game_manager.add_score(randi_range(10, 35))
+		area.call_deferred("queue_free")
+	elif area.is_in_group("rice_bowl"):
 		var points: int = 0
-		if area.is_in_group("obstacle"):
-			points = randi_range(10, 35)
-		elif area.is_in_group("rice_bowl") and area.has_method("get_score"):
+		if area.has_method("get_score"):
 			points = area.get_score()
 
 		# ネタのX座標とどんぶりのX座標の差分を保存
