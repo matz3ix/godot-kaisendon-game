@@ -6,9 +6,8 @@ var screen_size: Vector2
 var game_manager
 
 func _ready() -> void:
-	screen_size = get_viewport_rect().size
+	screen_size = get_viewport().get_visible_rect().size
 	area_entered.connect(_on_area_entered)
-	$Sprite2D.texture = preload("res://asset/donburi/donburi.png")
 
 func _process(delta: float) -> void:
 	if not game_manager or not game_manager.game_active:
