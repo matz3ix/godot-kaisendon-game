@@ -12,11 +12,19 @@ script = ExtResource("1_p1")
 shape = SubResource("RectangleShape2D_p1")
 
 [node name="Bowl" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-40, 0, 40, 0, 30, 30, -30, 30)
+polygon = PackedVector2Array(-38, 2, 38, 2, 28, 30, -28, 30)
 color = Color(0.6, 0.3, 0.1, 1.0)
 
+[node name="BowlRim" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-42, -4, 42, -4, 42, 4, -42, 4)
+color = Color(0.45, 0.22, 0.07, 1.0)
+
+[node name="BowlBase" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-18, 28, 18, 28, 18, 34, -18, 34)
+color = Color(0.45, 0.22, 0.07, 1.0)
+
 [node name="Rice" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-35, 0, -15, -20, 0, -25, 15, -20, 35, 0)
+polygon = PackedVector2Array(-35, 2, -15, -20, 0, -26, 15, -20, 35, 2)
 color = Color(1.0, 1.0, 0.95, 1.0)
 
 [node name="Salmon" type="Polygon2D" parent="."]
