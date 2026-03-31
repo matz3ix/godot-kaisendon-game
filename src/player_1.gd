@@ -2,6 +2,14 @@ extends Area2D
 
 const SPEED = 400.0
 
+const TOPPING_COLORS = [
+	Color(0.98, 0.5, 0.45),   # サーモン
+	Color(0.8, 0.1, 0.1),     # マグロ
+	Color(1.0, 0.85, 0.0),    # 卵
+	Color(0.95, 0.95, 0.95),  # イカ
+	Color(0.9, 0.4, 0.2),     # エビ
+]
+
 # どんぶり描画の定数
 const TOPPING_WIDTH = 50       # ネタの幅（obstacle の ColorRect サイズと同じ）
 const TOPPING_HEIGHT = 8       # ネタの高さ
@@ -45,32 +53,23 @@ func _process(delta: float) -> void:
 	position.x += vel_x * SPEED * delta
 	position.x = clamp(position.x, 0.0, screen_size.x)
 
-func _catch_topping() -> void:
-	caught_toppings.append(TOPPING_COLORS[randi() % TOPPING_COLORS.size()])
+func _catch_topping(area: Area2D) -> void:
+	var color = TOPPING_COLORS[randi() % TOPPING_COLORS.size()]
+	var x_offset = area.global_position.x - global_position.x
+	caught_toppings.append({"color": color, "x_offset": x_offset})
 	queue_redraw()
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("obstacle"):
-		_catch_topping()
+		_catch_topping(area)
 		if game_manager:
 			game_manager.add_score(randi_range(10, 35))
 		area.call_deferred("queue_free")
 	elif area.is_in_group("rice_bowl"):
+		_catch_topping(area)
 		var points: int = 0
 		if area.has_method("get_score"):
 			points = area.get_score()
-
-		# ネタのX座標とどんぶりのX座標の差分を保存
-		var x_offset = area.global_position.x - global_position.x
-		# obstacle の ColorRect から実際の色を取得
-		var color = Color.RED
-		var color_rect = area.get_node_or_null("ColorRect")
-		if color_rect:
-			color = color_rect.color
-		caught_toppings.append({"color": color, "x_offset": x_offset})
-		queue_redraw()
-
 		if game_manager and points > 0:
 			game_manager.add_score(points)
-
 		area.call_deferred("queue_free")
