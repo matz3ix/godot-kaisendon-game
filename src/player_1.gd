@@ -56,11 +56,19 @@ func _freeze_topping_in_place(area) -> void:
 			area.area_entered.connect(_on_stacked_topping_hit.bind(area))
 
 func _catch_and_score(area) -> void:
+	var is_obstacle = area.is_in_group("obstacle")
+	var is_rice_bowl = area.is_in_group("rice_bowl")
+	if not is_obstacle and not is_rice_bowl:
+		return
+	# Remove from catchable groups immediately to prevent double-catch
+	# (both the bowl and a stacked topping can receive area_entered for the same falling area)
+	area.remove_from_group("obstacle")
+	area.remove_from_group("rice_bowl")
 	_catch_topping(area)
-	if area.is_in_group("obstacle"):
+	if is_obstacle:
 		if game_manager:
-			game_manager.add_score(randi_range(10, 35))
-	elif area.is_in_group("rice_bowl"):
+			game_manager.deduct_score(randi_range(10, 35))
+	elif is_rice_bowl:
 		var points: int = 0
 		if area.has_method("get_score"):
 			points = area.get_score()
